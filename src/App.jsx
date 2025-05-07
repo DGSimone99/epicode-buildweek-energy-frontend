@@ -2,6 +2,7 @@ import { BrowserRouter, Route, Routes } from "react-router";
 import "./App.css";
 import LoginPage from "./components/LoginPage";
 import ClientiList from "./components/ClientiList";
+import FormClienti from "./components/FormClienti";
 
 function App() {
   return (

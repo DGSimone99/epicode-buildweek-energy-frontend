@@ -3,6 +3,7 @@ import "./App.css";
 import LoginPage from "./components/LoginPage";
 import ClientiList from "./components/ClientiList";
 import ClienteDetails from "./components/ClienteDetails";
+import FormFatture from "./components/FormFatture";
 
 function App() {
   return (
@@ -11,6 +12,7 @@ function App() {
         <Route path="/" element={<LoginPage />} />
         <Route path="/clienti" element={<ClientiList />} />
         <Route path="/cliente/:id" element={<ClienteDetails />} />
+        <Route path="/fatture" element={<FormFatture />} />
       </Routes>
     </BrowserRouter>
   );

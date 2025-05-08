@@ -5,8 +5,7 @@ export const GET_CLIENTI = "GET_CLIENTI";
 export const REGISTER = "REGISTER";
 export const SET_CLIENTE = "SET_CLIENTE";
 export const GET_CLIENTE = "GET_CLIENTE";
-export const GET_FATTURE_CLIENTE = "GET_FATTURE_CLIENTE";
-export const DELETE_FATTURA_CLIENTE = "DELETE_FATTURA_CLIENTE";
+export const GET_FATTURE = "GET_FATTURE";
 
 export const login = (credentials) => {
   return async (dispatch) => {
@@ -97,6 +96,58 @@ export const deleteFatturaCliente = (id) => {
       await axios.delete(`/api/fatture/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+};
+
+export const fetchFatture = (id) => {
+  return async (dispatch) => {
+    try {
+      const token = localStorage.getItem("token");
+      let fatture = await axios.get(`/api/fatture/${id}`, { headers: { Authorization: `Bearer ${token}` } });
+
+      dispatch({ type: GET_FATTURE, payload: fatture.data });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+};
+
+export const fetchFatturaDetails = (id) => {
+  return async (dispatch) => {
+    try {
+      const token = localStorage.getItem("token");
+      let fattura = await axios.get(`/api/fatture/${id}`, { headers: { Authorization: `Bearer ${token}` } });
+
+      dispatch({ type: GET_FATTURE, payload: fattura.data });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+};
+
+export const newFattura = (fattura) => {
+  return async () => {
+    try {
+      const token = localStorage.getItem("token");
+
+      const query = new URLSearchParams({
+        idCliente: fattura.idCliente,
+        data: fattura.data,
+        numero: fattura.numero,
+        importo: fattura.importo,
+        stato: fattura.stato,
+      }).toString();
+
+      await axios.post(
+        `/api/fatture?${query}`,
+        {},
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
     } catch (error) {
       console.log(error);
     }

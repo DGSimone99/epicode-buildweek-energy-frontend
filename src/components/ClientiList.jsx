@@ -5,6 +5,7 @@ import { Container } from "react-bootstrap";
 import { Row } from "react-bootstrap";
 import { Col } from "react-bootstrap";
 import FormClienti from "./FormClienti";
+import { Link } from "react-router";
 
 function ClientiList() {
   const clienti = useSelector((state) => state.clienti.clienti);
@@ -26,7 +27,7 @@ function ClientiList() {
         <Col>Telefono</Col>
       </Row>
       {clienti.map((client) => (
-        <Row key={client.id}>
+        <Row key={client.id} as={Link} to={`/cliente/${client.id}`}>
           <Col>{client.id}</Col>
           <Col>{client.ragioneSociale}</Col>
           <Col>{client.fatturatoAnnuale}</Col>

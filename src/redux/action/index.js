@@ -5,6 +5,8 @@ export const GET_CLIENTI = "GET_CLIENTI";
 export const REGISTER = "REGISTER";
 export const SET_CLIENTE = "SET_CLIENTE";
 export const GET_CLIENTE = "GET_CLIENTE";
+export const GET_FATTURE_CLIENTE = "GET_FATTURE_CLIENTE";
+export const DELETE_FATTURA_CLIENTE = "DELETE_FATTURA_CLIENTE";
 
 export const login = (credentials) => {
   return async (dispatch) => {
@@ -80,6 +82,19 @@ export const newClient = (client) => {
       };
 
       await axios.post(`/api/clienti?${query}`, body, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+};
+
+export const deleteFatturaCliente = (id) => {
+  return async () => {
+    try {
+      const token = localStorage.getItem("token");
+      await axios.delete(`/api/fatture/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
     } catch (error) {

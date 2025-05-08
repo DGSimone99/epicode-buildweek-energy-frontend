@@ -1,4 +1,4 @@
-import { GET_CLIENTI, SET_CLIENTE } from "../action";
+import { GET_CLIENTI } from "../action";
 
 const initialState = {
   clienti: [],

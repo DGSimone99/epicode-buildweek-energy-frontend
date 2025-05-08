@@ -2,7 +2,7 @@ import { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import { useDispatch } from "react-redux";
-import { fetchClienti, newClient } from "../redux/action";
+import { newClient } from "../redux/action";
 import { Container } from "react-bootstrap";
 
 function FormClienti() {

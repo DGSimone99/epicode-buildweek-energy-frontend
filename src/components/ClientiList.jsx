@@ -8,6 +8,7 @@ import { Link, useNavigate } from "react-router";
 import { TbTriangleFilled, TbTriangleInvertedFilled } from "react-icons/tb";
 import { VscTriangleLeft, VscTriangleRight } from "react-icons/vsc";
 import { PiPlus } from "react-icons/pi";
+import { FaSearch } from "react-icons/fa";
 
 function ClientiList() {
   const clienti = useSelector((state) => state.clienti.clienti.content);
@@ -29,6 +30,9 @@ function ClientiList() {
           <h1>Clienti</h1>
           <Button onClick={() => navigate("/clienti/new")}>
             <PiPlus className="fs-3 ms-3 border p-1" style={{ cursor: "pointer" }} />
+          </Button>
+          <Button onClick={() => navigate("/clienti/search")}>
+            <FaSearch className="fs-3 ms-3 border p-1" style={{ cursor: "pointer" }} />
           </Button>
         </div>
         <div className="d-flex align-items-center gap-3">

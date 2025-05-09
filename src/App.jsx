@@ -8,6 +8,7 @@ import FattureList from "./components/FattureList";
 import FormClienti from "./components/FormClienti";
 import RegisterPage from "./components/RegisterPage";
 import HomePage from "./components/HomePage";
+import SearchPage from "./components/SearchPage";
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
         <Route path="/clienti/edit/:id" element={<FormClienti />} />
         <Route path="/clienti/:id/nuova-fattura" element={<FormFatture />} />
         <Route path="/fatture" element={<FattureList />} />
+        <Route path="/clienti/search" element={<SearchPage />} />
       </Routes>
     </BrowserRouter>
   );

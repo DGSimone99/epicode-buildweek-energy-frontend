@@ -6,6 +6,7 @@ export const REGISTER = "REGISTER";
 export const SET_CLIENTE = "SET_CLIENTE";
 export const GET_CLIENTE = "GET_CLIENTE";
 export const GET_FATTURE = "GET_FATTURE";
+export const FILTER_CLIENTI = "FILTER_CLIENTI";
 
 export const login = (credentials) => async (dispatch) => {
   try {
@@ -217,4 +218,16 @@ export const newFattura = (fattura) => {
       console.log("Errore creazione fattura:", error.response?.data || error.message);
     }
   };
+};
+
+export const fetchClientiFiltrati = async (params) => {
+  const token = localStorage.getItem("token");
+
+  const query = new URLSearchParams(Object.entries(params).filter(([, v]) => v !== "")).toString();
+
+  const response = await axios.get(`/api/clienti/filter?${query}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+
+  return response.data;
 };

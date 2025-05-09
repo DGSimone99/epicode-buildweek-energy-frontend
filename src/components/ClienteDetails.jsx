@@ -33,9 +33,11 @@ function ClienteDetails() {
         <Button onClick={() => navigate("/clienti")} className="mb-4">
           Lista Clienti
         </Button>
-        <Button className="text-white" onClick={handleDeleteCliente} variant="danger">
-          Cancella Cliente
-        </Button>
+        {isAdmin() && (
+          <Button className="text-white" onClick={handleDeleteCliente} variant="danger">
+            Cancella Cliente
+          </Button>
+        )}
       </div>
       {cliente ? (
         <>

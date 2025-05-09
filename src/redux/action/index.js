@@ -7,21 +7,23 @@ export const SET_CLIENTE = "SET_CLIENTE";
 export const GET_CLIENTE = "GET_CLIENTE";
 export const GET_FATTURE = "GET_FATTURE";
 
-export const login = (credentials) => {
-  return async (dispatch) => {
-    try {
-      let login = await axios.post("/api/auth/login", credentials);
+export const login = (credentials) => async (dispatch) => {
+  try {
+    const res = await axios.post("/api/auth/login", credentials);
+    const { token, username, roles } = res.data;
 
-      const { token, username, roles } = login.data;
-      dispatch({
-        type: LOGIN,
-        payload: { token, username, roles },
-      });
-      localStorage.setItem("token", token);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+    dispatch({
+      type: LOGIN,
+      payload: { token, username, roles },
+    });
+
+    localStorage.setItem("token", token);
+
+    return { success: true };
+  } catch (error) {
+    console.error("Login error:", error);
+    return { success: false };
+  }
 };
 
 export const register = (formData, role1 = "ROLE_USER", role2 = "") => {

@@ -19,6 +19,8 @@ function App() {
         <Route path="/clienti" element={<ClientiList />} />
         <Route path="/clienti/new" element={<FormClienti />} />
         <Route path="/cliente/:id" element={<ClienteDetails />} />
+        <Route path="/clienti/edit/:id" element={<FormClienti />} />
+        <Route path="/clienti/:id/nuova-fattura" element={<FormFatture />} />
         <Route path="/fatture" element={<FattureList />} />
       </Routes>
     </BrowserRouter>

@@ -1,12 +1,16 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router";
-import { deleteFatturaCliente, fetchClienteDetails } from "../redux/action";
+import { useParams, useNavigate, Link } from "react-router";
+import { deleteCliente, deleteFatturaCliente, fetchClienteDetails } from "../redux/action";
 import { Button, Card, Col, Container, Image, Row, Table } from "react-bootstrap";
+import { isAdmin } from "../utils/getUserRoles";
+import { PiPlus } from "react-icons/pi";
+import { BiPencil } from "react-icons/bi";
 
 function ClienteDetails() {
   const { id } = useParams();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const cliente = useSelector((state) => state.cliente.cliente || {});
   const fatture = useSelector((state) => state.cliente.cliente.fatture || []);
 
@@ -19,8 +23,23 @@ function ClienteDetails() {
     dispatch(fetchClienteDetails(id));
   };
 
+  const handleDeleteCliente = async () => {
+    await dispatch(deleteCliente(id));
+    navigate("/clienti");
+  };
+
   return (
-    <Container className="mt-4 text-light">
+    <Container className="my-4 text-light">
+      <div className="d-flex justify-content-between align-items-center">
+        <Button onClick={() => navigate("/clienti")} className="mb-4">
+          Lista Clienti
+        </Button>
+        {isAdmin() && (
+          <Button className="text-white" onClick={handleDeleteCliente} variant="danger">
+            Cancella Cliente
+          </Button>
+        )}
+      </div>
       {cliente ? (
         <>
           <Row className="justify-content-center mb-4">
@@ -28,8 +47,14 @@ function ClienteDetails() {
               <Image src={cliente.logoAziendale} alt="logo" className="rounded-circle" style={{ width: "150px" }} />
             </Col>
           </Row>
-          <h2 className="text-center mb-4">Dettagli Cliente</h2>
-
+          <div className="d-flex justify-content-center align-items-center mb-4">
+            <h2 className="m-0">Dettagli Cliente</h2>
+            {isAdmin() && (
+              <Button as={Link} to={`/clienti/edit/${id}`} className="fs-3">
+                <BiPencil></BiPencil>
+              </Button>
+            )}
+          </div>
           <Card className="mb-4 bg-secondary text-light">
             <Card.Header className="fw-bold bg-dark text-light">Informazioni Generali</Card.Header>
             <Card.Body>
@@ -105,6 +130,11 @@ function ClienteDetails() {
           <Card className="bg-secondary text-light">
             <Card.Header className="fw-bold bg-dark text-light">Fatture</Card.Header>
             <Card.Body>
+              {isAdmin() && (
+                <Button onClick={() => navigate(`/clienti/${id}/nuova-fattura`)}>
+                  <PiPlus className="fs-3 mb-2 border p-1" style={{ cursor: "pointer" }} />
+                </Button>
+              )}
               <Table striped bordered hover responsive variant="dark">
                 <thead>
                   <tr>
@@ -125,9 +155,11 @@ function ClienteDetails() {
                       <td>{fattura.numero}</td>
                       <td>{fattura.stato}</td>
                       <td>
-                        <Button variant="danger" size="sm" onClick={() => handleDelete(fattura.id)}>
-                          Elimina
-                        </Button>
+                        {isAdmin() && (
+                          <Button variant="danger" size="sm" onClick={() => handleDelete(fattura.id)}>
+                            Elimina
+                          </Button>
+                        )}
                       </td>
                     </tr>
                   ))}

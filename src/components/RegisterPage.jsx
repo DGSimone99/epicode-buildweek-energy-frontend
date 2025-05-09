@@ -27,13 +27,16 @@ function RegisterPage() {
 
   return (
     <Container className="h-100 mt-5">
-      <Form onSubmit={handleSubmit} className="text-center">
+      <Form
+        onSubmit={handleSubmit}
+        className="d-flex flex-column justify-content-center align-items-center text-center"
+      >
         {["username", "password", "nome", "cognome", "email"].map((field) => (
           <Form.Group controlId={field} key={field}>
             <Form.Label>{field.charAt(0).toUpperCase() + field.slice(1)}</Form.Label>
             <Form.Control
               type={field === "password" ? "password" : "text"}
-              placeholder={field}
+              placeholder={field.toUpperCase()}
               value={form[field]}
               onChange={(e) => setForm({ ...form, [field]: e.target.value })}
               className="bg-black border-0"

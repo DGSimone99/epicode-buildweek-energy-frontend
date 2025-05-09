@@ -113,6 +113,50 @@ export const newClient = (client) => {
   };
 };
 
+export const updateClient = (client, id) => {
+  return async () => {
+    try {
+      const token = localStorage.getItem("token");
+
+      const body = {
+        ragioneSociale: client.ragioneSociale,
+        partitaIva: client.partitaIva,
+        email: client.email,
+        dataInserimento: client.dataInserimento,
+        dataUltimoContatto: client.dataUltimoContatto,
+        fatturatoAnnuale: client.fatturatoAnnuale,
+        pec: client.pec,
+        telefono: client.telefono,
+        emailContatto: client.emailContatto,
+        nomeContatto: client.nomeContatto,
+        cognomeContatto: client.cognomeContatto,
+        telefonoContatto: client.telefonoContatto,
+        logoAziendale: client.logoAziendale || "",
+      };
+
+      return await axios.put(`/api/clienti/${id}`, body, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  };
+};
+
+export const deleteCliente = (id) => {
+  return async () => {
+    try {
+      const token = localStorage.getItem("token");
+      await axios.delete(`/api/clienti/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+};
+
 export const deleteFatturaCliente = (id) => {
   return async () => {
     try {
@@ -157,23 +201,20 @@ export const newFattura = (fattura) => {
     try {
       const token = localStorage.getItem("token");
 
-      const query = new URLSearchParams({
-        idCliente: fattura.idCliente,
-        data: fattura.data,
-        numero: fattura.numero,
-        importo: fattura.importo,
-        stato: fattura.stato,
-      }).toString();
-
       await axios.post(
-        `/api/fatture?${query}`,
-        {},
+        `/api/fatture/clienti/${fattura.idCliente}`,
+        {
+          data: fattura.data,
+          importo: fattura.importo,
+          numero: fattura.numero,
+          stato: fattura.stato,
+        },
         {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
     } catch (error) {
-      console.log(error);
+      console.log("Errore creazione fattura:", error.response?.data || error.message);
     }
   };
 };

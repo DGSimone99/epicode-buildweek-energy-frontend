@@ -3,7 +3,7 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import { useDispatch } from "react-redux";
 import { login } from "../redux/action";
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { Container } from "react-bootstrap";
 
 function LoginPage() {
@@ -36,7 +36,7 @@ function LoginPage() {
   };
 
   return (
-    <Container className="h-100">
+    <Container className="h-100 mt-5">
       <Form
         noValidate
         validated={validated}
@@ -72,6 +72,9 @@ function LoginPage() {
         <Button className="mt-3 bg-primary" type="submit">
           Login
         </Button>
+        <Link className="mt-3 text-decoration-none" to="/register">
+          Registrati
+        </Link>
       </Form>
     </Container>
   );

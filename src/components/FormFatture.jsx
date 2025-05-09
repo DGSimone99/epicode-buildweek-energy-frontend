@@ -1,22 +1,25 @@
 import { useState } from "react";
-import Button from "react-bootstrap/Button";
-import Form from "react-bootstrap/Form";
 import { useDispatch } from "react-redux";
+import { useNavigate, useParams } from "react-router-dom";
 import { newFattura } from "../redux/action";
-import { Container } from "react-bootstrap";
+import { Container, Button, Form } from "react-bootstrap";
 
 function FormFatture() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { id } = useParams();
+
   const [form, setForm] = useState({
-    idCliente: "",
     importo: "",
     numero: "",
     stato: "",
+    data: "",
   });
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    dispatch(newFattura(form));
+    dispatch(newFattura({ ...form, idCliente: id }));
+    navigate(`/cliente/${id}`);
   };
 
   return (
@@ -26,65 +29,53 @@ function FormFatture() {
         onSubmit={handleSubmit}
         className="d-flex flex-column justify-content-center align-items-center text-center"
       >
-        <Form.Group controlId="validationCustom02">
-          <Form.Label>Id Cliente</Form.Label>
-          <Form.Control
-            value={form.idCliente}
-            required
-            type="text"
-            placeholder="idCliente"
-            onChange={(e) => setForm({ ...form, idCliente: e.target.value })}
-            className="bg-black border-0"
-          />
-          <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
-        </Form.Group>
-        <Form.Group controlId="validationCustom03">
+        <Form.Group controlId="importo">
           <Form.Label>Importo</Form.Label>
           <Form.Control
             value={form.importo}
             required
-            type="text"
-            placeholder="importo"
+            type="number"
+            placeholder="Importo"
             onChange={(e) => setForm({ ...form, importo: e.target.value })}
             className="bg-black border-0"
           />
-          <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
         </Form.Group>
-        <Form.Group controlId="validationCustom04">
+
+        <Form.Group controlId="numero">
           <Form.Label>Numero</Form.Label>
           <Form.Control
             value={form.numero}
             required
             type="text"
-            placeholder="numero"
+            placeholder="Numero"
             onChange={(e) => setForm({ ...form, numero: e.target.value })}
             className="bg-black border-0"
           />
-          <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
         </Form.Group>
-        <Form.Group controlId="validationCustom06">
+
+        <Form.Group controlId="data">
           <Form.Label>Data</Form.Label>
           <Form.Control
             value={form.data}
             required
             type="date"
-            placeholder="data"
             onChange={(e) => setForm({ ...form, data: e.target.value })}
             className="bg-black border-0"
           />
-          <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
         </Form.Group>
-        <Form.Group controlId="validationCustom05">
+
+        <Form.Group controlId="stato">
           <Form.Label>Stato</Form.Label>
-          <Form.Control
+          <Form.Select
             value={form.stato}
             required
-            type="text"
-            placeholder="stato"
             onChange={(e) => setForm({ ...form, stato: e.target.value })}
             className="bg-black border-0"
-          />
-          <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+          >
+            <option value="">Seleziona stato</option>
+            <option value="PAGATA">Pagata</option>
+            <option value="NON_PAGATA">Non Pagata</option>
+          </Form.Select>
         </Form.Group>
 
         <Button className="mt-3 bg-primary" type="submit">

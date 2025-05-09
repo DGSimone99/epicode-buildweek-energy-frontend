@@ -24,6 +24,24 @@ export const login = (credentials) => {
   };
 };
 
+export const register = (formData, role1 = "ROLE_USER", role2 = "") => {
+  return async (dispatch) => {
+    try {
+      const res = await axios.post("/api/auth/register", formData, {
+        params: {
+          role: role1,
+          role2: role2 || role1,
+        },
+      });
+      dispatch({ type: REGISTER });
+      return res;
+    } catch (error) {
+      console.error("Errore nella registrazione:", error);
+      throw error;
+    }
+  };
+};
+
 export const fetchClienti = (page = 0, size = 10, sortBy = "id", direction = "asc") => {
   return async (dispatch) => {
     try {

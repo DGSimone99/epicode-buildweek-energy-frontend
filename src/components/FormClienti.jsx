@@ -23,7 +23,7 @@ function FormClienti() {
     nomeContatto: "",
     cognomeContatto: "",
     telefonoContatto: "",
-    tipoCliente: "",
+    tipoCliente: "PA",
     indirizzoSedeLegale: {
       via: "",
       civico: "",

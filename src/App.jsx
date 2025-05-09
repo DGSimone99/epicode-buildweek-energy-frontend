@@ -21,7 +21,7 @@ function App() {
         <Route path="/clienti/new" element={<FormClienti />} />
         <Route path="/cliente/:id" element={<ClienteDetails />} />
         <Route path="/cliente/edit/:id" element={<FormClienti />} />
-        <Route path="/cliente/:id/nuova-fattura" element={<FormFatture />} />
+        <Route path="/cliente/:idCliente/nuova-fattura" element={<FormFatture />} />
         <Route path="/fatture" element={<FattureList />} />
         <Route path="/fatture/:idCliente/:idFattura" element={<FormFatture />} />
         <Route path="/clienti/search" element={<SearchPage />} />

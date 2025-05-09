@@ -148,7 +148,7 @@ function ClienteDetails() {
                     <th>Importo</th>
                     <th>Numero</th>
                     <th>Stato</th>
-                    <th>Azioni</th>
+                    {isAdmin() && <th>Azioni</th>}
                   </tr>
                 </thead>
                 <tbody>
@@ -159,8 +159,8 @@ function ClienteDetails() {
                       <td>€{fattura.importo}</td>
                       <td>{fattura.numero}</td>
                       <td>{fattura.stato}</td>
-                      <td className="d-flex justify-content-center">
-                        {isAdmin() && (
+                      {isAdmin() && (
+                        <td className="d-flex justify-content-center">
                           <Button
                             variant="primary"
                             size="sm"
@@ -169,13 +169,11 @@ function ClienteDetails() {
                           >
                             Modifica
                           </Button>
-                        )}
-                        {isAdmin() && (
                           <Button variant="danger" size="sm" onClick={() => handleDelete(fattura.id)}>
                             Elimina
                           </Button>
-                        )}
-                      </td>
+                        </td>
+                      )}
                     </tr>
                   ))}
                 </tbody>

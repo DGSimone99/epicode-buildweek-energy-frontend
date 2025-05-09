@@ -32,6 +32,7 @@ function SearchPage() {
       <Form onSubmit={handleSearch}>
         <Row className="mb-3">
           <Col md={3}>
+            <Form.Label>Fatturato minimo</Form.Label>
             <Form.Control
               className="bg-black border-0"
               type="number"
@@ -42,6 +43,7 @@ function SearchPage() {
             />
           </Col>
           <Col md={3}>
+            <Form.Label>Data inserimento</Form.Label>
             <Form.Control
               className="bg-black border-0"
               type="date"
@@ -51,6 +53,7 @@ function SearchPage() {
             />
           </Col>
           <Col md={3}>
+            <Form.Label>Data ultimo contatto</Form.Label>
             <Form.Control
               className="bg-black border-0"
               type="date"
@@ -60,6 +63,7 @@ function SearchPage() {
             />
           </Col>
           <Col md={3}>
+            <Form.Label>Nome</Form.Label>
             <Form.Control
               className="bg-black border-0"
               type="text"

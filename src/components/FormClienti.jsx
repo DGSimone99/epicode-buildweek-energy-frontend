@@ -112,7 +112,7 @@ function FormClienti() {
       })
       .then(() => {
         if (id) {
-          navigate(`/clienti/${id}`);
+          navigate(`/cliente/${id}`);
         } else {
           navigate("/clienti");
         }

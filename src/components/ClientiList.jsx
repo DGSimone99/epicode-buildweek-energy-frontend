@@ -25,6 +25,9 @@ function ClientiList() {
 
   return (
     <Container className="mt-5">
+      <Link to="/" className="d-flex justify-content-center align-items-center">
+        Home
+      </Link>
       <div className="d-flex justify-content-between align-items-center  mb-4">
         <div className="d-flex align-items-center">
           <h1>Clienti</h1>

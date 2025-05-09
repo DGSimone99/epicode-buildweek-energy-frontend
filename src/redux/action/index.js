@@ -7,6 +7,7 @@ export const SET_CLIENTE = "SET_CLIENTE";
 export const GET_CLIENTE = "GET_CLIENTE";
 export const GET_FATTURE = "GET_FATTURE";
 export const GET_FATTURA = "GET_FATTURA";
+export const FILTER_CLIENTI = "FILTER_CLIENTI";
 
 export const login = (credentials) => async (dispatch) => {
   try {
@@ -242,6 +243,18 @@ export const updateFattura = (fattura, id) => {
       throw error;
     }
   };
+};
+
+export const fetchClientiFiltrati = async (params) => {
+  const token = localStorage.getItem("token");
+
+  const query = new URLSearchParams(Object.entries(params).filter(([, v]) => v !== "")).toString();
+
+  const response = await axios.get(`/api/clienti/filter?${query}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+
+  return response.data;
 };
 
 export const uploadLogoAziendale = (clienteId, file) => {

@@ -6,6 +6,7 @@ export const REGISTER = "REGISTER";
 export const SET_CLIENTE = "SET_CLIENTE";
 export const GET_CLIENTE = "GET_CLIENTE";
 export const GET_FATTURE = "GET_FATTURE";
+export const GET_FATTURA = "GET_FATTURA";
 
 export const login = (credentials) => async (dispatch) => {
   try {
@@ -189,7 +190,7 @@ export const fetchFatturaDetails = (id) => {
       const token = localStorage.getItem("token");
       let fattura = await axios.get(`/api/fatture/${id}`, { headers: { Authorization: `Bearer ${token}` } });
 
-      dispatch({ type: GET_FATTURE, payload: fattura.data });
+      dispatch({ type: GET_FATTURA, payload: fattura.data });
     } catch (error) {
       console.log(error);
     }
@@ -215,6 +216,55 @@ export const newFattura = (fattura) => {
       );
     } catch (error) {
       console.log("Errore creazione fattura:", error.response?.data || error.message);
+    }
+  };
+};
+
+export const updateFattura = (fattura, id) => {
+  return async () => {
+    try {
+      const token = localStorage.getItem("token");
+
+      return await axios.put(
+        `/api/fatture/${id}`,
+        {
+          data: fattura.data,
+          importo: fattura.importo,
+          numero: fattura.numero,
+          stato: fattura.stato,
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  };
+};
+
+export const uploadLogoAziendale = (clienteId, file) => {
+  return async () => {
+    try {
+      const token = localStorage.getItem("token");
+
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("id", clienteId);
+
+      await fetch(`/api/clienti/${clienteId}/logoaziendale`, {
+        method: "PATCH",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: formData,
+      });
+
+      console.log("Logo caricato con successo.");
+    } catch (error) {
+      console.error("Errore durante l'upload del logo:", error);
+      throw error;
     }
   };
 };

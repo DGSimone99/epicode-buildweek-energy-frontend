@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchClienteDetails, newClient, updateClient } from "../redux/action";
+import { fetchClienteDetails, newClient, updateClient, uploadLogoAziendale } from "../redux/action";
 import { Col, Container, Row } from "react-bootstrap";
 import { Link, useNavigate, useParams } from "react-router";
 
@@ -12,6 +12,7 @@ function FormClienti() {
   const navigate = useNavigate();
   const [errore, setErrore] = useState(false);
   const clienteDettaglio = useSelector((state) => state.cliente.cliente);
+  const [logoFile, setLogoFile] = useState(null);
   const [form, setForm] = useState({
     ragioneSociale: "",
     partitaIva: "",
@@ -26,6 +27,8 @@ function FormClienti() {
     cognomeContatto: "",
     telefonoContatto: "",
     tipoCliente: "PA",
+    logoAziendale:
+      "https://media.istockphoto.com/id/2151669184/it/vettoriale/illustrazione-piatta-vettoriale-in-scala-di-grigi-avatar-profilo-utente-icona-della.jpg?s=612x612&w=0&k=20&c=uGwDLLLqQGws1Jll6wFAQq_Nqj72WI7n6iexvyjoyE4=",
     indirizzoSedeLegale: {
       via: "",
       civico: "",
@@ -103,7 +106,16 @@ function FormClienti() {
 
     dispatch(action)
       .then(() => {
-        navigate("/clienti");
+        if (logoFile && id) {
+          return dispatch(uploadLogoAziendale(id, logoFile));
+        }
+      })
+      .then(() => {
+        if (id) {
+          navigate(`/clienti/${id}`);
+        } else {
+          navigate("/clienti");
+        }
       })
       .catch((error) => {
         console.error("Errore durante la richiesta:", error);
@@ -185,17 +197,18 @@ function FormClienti() {
                   <option value="SPA">SPA</option>
                   <option value="SRL">SRL</option>
                 </Form.Select>
-
-                <Form.Group controlId="XXXXXXXXXXXXXXXXXX">
-                  <Form.Label className="mb-1 mt-2">Upload Foto Profilo</Form.Label>
-                  <Form.Control
-                    type="file"
-                    accept="image/*"
-                    onChange={(e) => setForm({ ...form, fotoProfilo: e.target.files[0] })}
-                    className="bg-black border-0 my-2"
-                  />
-                </Form.Group>
               </div>
+            )}
+            {id && (
+              <Form.Group controlId="XXXXXXXXXXXXXXXXXX">
+                <Form.Label className="mb-1 mt-2">Upload Foto Profilo</Form.Label>
+                <Form.Control
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => setLogoFile(e.target.files[0])}
+                  className="bg-black border-0 my-2"
+                />
+              </Form.Group>
             )}
           </Col>
 
@@ -403,9 +416,15 @@ function FormClienti() {
               Modifica
             </Button>
           )}
-          <Button as={Link} to="/clienti">
-            Torna indietro
-          </Button>
+          {!id ? (
+            <Button as={Link} to="/clienti">
+              Torna indietro
+            </Button>
+          ) : (
+            <Button as={Link} to={`/cliente/${id}`}>
+              Torna indietro
+            </Button>
+          )}
         </Row>
       </Form>
     </Container>

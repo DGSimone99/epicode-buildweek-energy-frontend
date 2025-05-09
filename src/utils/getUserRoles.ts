@@ -12,7 +12,6 @@ export function getUserRoles(): string[] {
 
   try {
     const decoded = jwtDecode<JwtPayload>(token);
-    console.log("TOKEN DECODIFICATO:", decoded);
 
     const roles = decoded.roles;
 

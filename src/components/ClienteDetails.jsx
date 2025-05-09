@@ -44,13 +44,18 @@ function ClienteDetails() {
         <>
           <Row className="justify-content-center mb-4">
             <Col xs="auto">
-              <Image src={cliente.logoAziendale} alt="logo" className="rounded-circle" style={{ width: "150px" }} />
+              <Image
+                src={cliente.logoAziendale}
+                alt="logo"
+                className="rounded-circle"
+                style={{ width: "150px", height: "150px" }}
+              />
             </Col>
           </Row>
           <div className="d-flex justify-content-center align-items-center mb-4">
             <h2 className="m-0">Dettagli Cliente</h2>
             {isAdmin() && (
-              <Button as={Link} to={`/clienti/edit/${id}`} className="fs-3">
+              <Button as={Link} to={`/cliente/edit/${id}`} className="fs-3">
                 <BiPencil></BiPencil>
               </Button>
             )}
@@ -131,7 +136,7 @@ function ClienteDetails() {
             <Card.Header className="fw-bold bg-dark text-light">Fatture</Card.Header>
             <Card.Body>
               {isAdmin() && (
-                <Button onClick={() => navigate(`/clienti/${id}/nuova-fattura`)}>
+                <Button onClick={() => navigate(`/cliente/${id}/nuova-fattura`)}>
                   <PiPlus className="fs-3 mb-2 border p-1" style={{ cursor: "pointer" }} />
                 </Button>
               )}
@@ -154,7 +159,17 @@ function ClienteDetails() {
                       <td>€{fattura.importo}</td>
                       <td>{fattura.numero}</td>
                       <td>{fattura.stato}</td>
-                      <td>
+                      <td className="d-flex justify-content-center">
+                        {isAdmin() && (
+                          <Button
+                            variant="primary"
+                            size="sm"
+                            onClick={() => navigate(`/fatture/${cliente.id}/${fattura.id}`)}
+                            className="me-2"
+                          >
+                            Modifica
+                          </Button>
+                        )}
                         {isAdmin() && (
                           <Button variant="danger" size="sm" onClick={() => handleDelete(fattura.id)}>
                             Elimina

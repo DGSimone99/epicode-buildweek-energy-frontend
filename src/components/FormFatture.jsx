@@ -1,13 +1,15 @@
-import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
-import { newFattura } from "../redux/action";
+import { fetchFatturaDetails, newFattura, updateFattura } from "../redux/action";
 import { Container, Button, Form } from "react-bootstrap";
 
 function FormFatture() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { id } = useParams();
+  const { idCliente, idFattura } = useParams();
+  const fatturaDettaglio = useSelector((state) => state.fattura.fattura);
+  const [errore, setErrore] = useState(false);
 
   const [form, setForm] = useState({
     importo: "",
@@ -16,16 +18,59 @@ function FormFatture() {
     data: "",
   });
 
+  const [validated, setValidated] = useState(false);
+
+  useEffect(() => {
+    if (idFattura) {
+      dispatch(fetchFatturaDetails(idFattura));
+    }
+  }, [idFattura, dispatch]);
+
+  useEffect(() => {
+    if (idFattura && fatturaDettaglio) {
+      setForm({
+        importo: fatturaDettaglio.importo || "",
+        numero: fatturaDettaglio.numero || "",
+        stato: fatturaDettaglio.stato || "",
+        data: fatturaDettaglio.data || "",
+      });
+    }
+  }, [fatturaDettaglio, idFattura]);
+
   const handleSubmit = (event) => {
     event.preventDefault();
-    dispatch(newFattura({ ...form, idCliente: id }));
-    navigate(`/cliente/${id}`);
+
+    const formElement = event.currentTarget;
+    if (formElement.checkValidity() === false) {
+      event.stopPropagation();
+      setValidated(true);
+      return;
+    }
+    setValidated(true);
+
+    const finalForm = { ...form };
+
+    if (!idFattura) {
+      finalForm.idCliente = idCliente;
+    }
+
+    const action = idFattura ? updateFattura(finalForm, idFattura) : newFattura(finalForm);
+
+    dispatch(action)
+      .then(() => {
+        navigate("/cliente/" + idCliente);
+      })
+      .catch((error) => {
+        console.error("Errore durante la richiesta:", error);
+        setErrore(true);
+      });
   };
 
   return (
     <Container className="h-100 mt-5">
       <Form
         noValidate
+        validated={validated}
         onSubmit={handleSubmit}
         className="d-flex flex-column justify-content-center align-items-center text-center"
       >
@@ -77,9 +122,12 @@ function FormFatture() {
             <option value="NON_PAGATA">Non Pagata</option>
           </Form.Select>
         </Form.Group>
-
+        {errore ? <p className="text-danger text-center m-0">Dati invalidi</p> : <p className="m-0"> </p>}
         <Button className="mt-3 bg-primary" type="submit">
-          Crea
+          {idFattura ? "Modifica" : "Crea"}
+        </Button>
+        <Button className="mt-3" onClick={() => navigate("/cliente/" + idCliente)}>
+          Indietro
         </Button>
       </Form>
     </Container>

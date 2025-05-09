@@ -8,46 +8,66 @@ import { Container } from "react-bootstrap";
 
 function LoginPage() {
   const dispatch = useDispatch();
-  const [form, setForm] = useState({ username: "", password: "" });
   const navigate = useNavigate();
 
-  const handleSubmit = (event) => {
+  const [form, setForm] = useState({ username: "", password: "" });
+  const [errore, setErrore] = useState(false);
+  const [validated, setValidated] = useState(false);
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    dispatch(login(form));
-    navigate("/clienti");
+
+    const formElement = event.currentTarget;
+    if (!formElement.checkValidity()) {
+      event.stopPropagation();
+      setValidated(true);
+      return;
+    }
+
+    setValidated(true);
+    setErrore(false);
+
+    const result = await dispatch(login(form));
+    if (result?.success) {
+      navigate("/clienti");
+    } else {
+      setErrore(true);
+    }
   };
 
   return (
     <Container className="h-100">
       <Form
         noValidate
+        validated={validated}
         onSubmit={handleSubmit}
         className="d-flex flex-column justify-content-center align-items-center text-center"
       >
-        <Form.Group controlId="validationCustom01">
+        <Form.Group controlId="validationUsername">
           <Form.Label>Username</Form.Label>
           <Form.Control
-            value={form.username}
             required
             type="text"
             placeholder="Username"
+            value={form.username}
             onChange={(e) => setForm({ ...form, username: e.target.value })}
             className="bg-black border-0"
           />
-          <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
         </Form.Group>
-        <Form.Group controlId="validationCustom02">
+
+        <Form.Group controlId="validationPassword">
           <Form.Label>Password</Form.Label>
           <Form.Control
-            value={form.password}
             required
             type="password"
             placeholder="Password"
+            value={form.password}
             onChange={(e) => setForm({ ...form, password: e.target.value })}
             className="bg-black border-0"
           />
-          <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
         </Form.Group>
+
+        {errore && <p className="text-danger mt-2">Credenziali non valide</p>}
 
         <Button className="mt-3 bg-primary" type="submit">
           Login

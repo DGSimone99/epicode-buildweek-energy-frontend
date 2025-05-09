@@ -5,3 +5,10 @@ body {
 body * {
   color: white !important;
 }
+
+.pointer {
+  cursor: pointer;
+  &:hover {
+    background-color: #ffffff24 !important;
+  }
+}

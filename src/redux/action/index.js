@@ -24,11 +24,14 @@ export const login = (credentials) => {
   };
 };
 
-export const fetchClienti = () => {
+export const fetchClienti = (page = 0, size = 10, sortBy = "id", direction = "asc") => {
   return async (dispatch) => {
     try {
       const token = localStorage.getItem("token");
-      let clienti = await axios.get("/api/clienti", { headers: { Authorization: `Bearer ${token}` } });
+      let clienti = await axios.get(
+        `/api/clienti/sorted?page=${page}&size=${size}&sortBy=${sortBy}&direction=${direction}`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
 
       dispatch({ type: GET_CLIENTI, payload: clienti.data });
     } catch (error) {
@@ -80,11 +83,12 @@ export const newClient = (client) => {
         indirizzoSedeOperativa: client.indirizzoSedeOperativa,
       };
 
-      await axios.post(`/api/clienti?${query}`, body, {
+      return await axios.post(`/api/clienti?${query}`, body, {
         headers: { Authorization: `Bearer ${token}` },
       });
     } catch (error) {
       console.log(error);
+      throw error;
     }
   };
 };

@@ -13,7 +13,12 @@ function ClienteDetails() {
 
   useEffect(() => {
     dispatch(fetchClienteDetails(id));
-  }, [dispatch, id, fatture]);
+  }, [dispatch, id]);
+
+  const handleDelete = async (idFattura) => {
+    await dispatch(deleteFatturaCliente(idFattura));
+    dispatch(fetchClienteDetails(id));
+  };
 
   return (
     <div>
@@ -25,7 +30,7 @@ function ClienteDetails() {
             <Row>
               <Row className="mb-3">
                 <Col>
-                  <h5>Tipo Cliente: </h5>
+                  <h5>Tipo Cliente:</h5>
                   <p> {cliente.tipoCliente}</p>
                 </Col>
                 <Col>
@@ -117,7 +122,7 @@ function ClienteDetails() {
                 <Col>{fattura.numero}</Col>
                 <Col>{fattura.stato}</Col>
                 <Col>
-                  <Button onClick={() => deleteFatturaCliente(fattura.id)} className=" btn btn-danger">
+                  <Button onClick={() => handleDelete(fattura.id)()} className=" btn btn-danger">
                     Elimina
                   </Button>
                 </Col>

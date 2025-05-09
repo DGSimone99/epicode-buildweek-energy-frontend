@@ -113,6 +113,37 @@ export const newClient = (client) => {
   };
 };
 
+export const updateClient = (client, id) => {
+  return async () => {
+    try {
+      const token = localStorage.getItem("token");
+
+      const body = {
+        ragioneSociale: client.ragioneSociale,
+        partitaIva: client.partitaIva,
+        email: client.email,
+        dataInserimento: client.dataInserimento,
+        dataUltimoContatto: client.dataUltimoContatto,
+        fatturatoAnnuale: client.fatturatoAnnuale,
+        pec: client.pec,
+        telefono: client.telefono,
+        emailContatto: client.emailContatto,
+        nomeContatto: client.nomeContatto,
+        cognomeContatto: client.cognomeContatto,
+        telefonoContatto: client.telefonoContatto,
+        logoAziendale: client.logoAziendale || "",
+      };
+
+      return await axios.put(`/api/clienti/${id}`, body, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  };
+};
+
 export const deleteCliente = (id) => {
   return async () => {
     try {

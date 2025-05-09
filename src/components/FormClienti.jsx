@@ -1,15 +1,17 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
-import { useDispatch } from "react-redux";
-import { newClient } from "../redux/action";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchClienteDetails, newClient, updateClient } from "../redux/action";
 import { Col, Container, Row } from "react-bootstrap";
-import { Link, useNavigate } from "react-router";
+import { Link, useNavigate, useParams } from "react-router";
 
 function FormClienti() {
+  const { id } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [errore, setErrore] = useState(false);
+  const clienteDettaglio = useSelector((state) => state.cliente.cliente);
   const [form, setForm] = useState({
     ragioneSociale: "",
     partitaIva: "",
@@ -42,6 +44,50 @@ function FormClienti() {
 
   const [validated, setValidated] = useState(false);
 
+  useEffect(() => {
+    if (id) {
+      dispatch(fetchClienteDetails(id));
+    }
+  }, [id, dispatch]);
+
+  useEffect(() => {
+    if (id && clienteDettaglio) {
+      setForm({
+        ragioneSociale: clienteDettaglio.ragioneSociale || "",
+        partitaIva: clienteDettaglio.partitaIva || "",
+        email: clienteDettaglio.email || "",
+        dataInserimento: clienteDettaglio.dataInserimento || "",
+        dataUltimoContatto: clienteDettaglio.dataUltimoContatto || "",
+        fatturatoAnnuale: clienteDettaglio.fatturatoAnnuale || "",
+        pec: clienteDettaglio.pec || "",
+        telefono: clienteDettaglio.telefono || "",
+        emailContatto: clienteDettaglio.emailContatto || "",
+        nomeContatto: clienteDettaglio.nomeContatto || "",
+        cognomeContatto: clienteDettaglio.cognomeContatto || "",
+        telefonoContatto: clienteDettaglio.telefonoContatto || "",
+        logoAziendale: clienteDettaglio.logoAziendale || "",
+
+        tipoCliente: clienteDettaglio.tipoCliente || "PA",
+
+        indirizzoSedeLegale: clienteDettaglio.indirizzoSedeLegale || {
+          via: "",
+          civico: "",
+          localita: "",
+          cap: "",
+        },
+        indirizzoSedeOperativa: clienteDettaglio.indirizzoSedeOperativa || {
+          via: "",
+          civico: "",
+          localita: "",
+          cap: "",
+        },
+
+        comuneSedeLegale: clienteDettaglio.comuneSedeLegale || "",
+        comuneSedeOperativa: clienteDettaglio.comuneSedeOperativa || "",
+      });
+    }
+  }, [clienteDettaglio, id]);
+
   const handleSubmit = (event) => {
     event.preventDefault();
 
@@ -53,12 +99,14 @@ function FormClienti() {
     }
     setValidated(true);
 
-    dispatch(newClient(form))
+    const action = id ? updateClient(form, id) : newClient(form);
+
+    dispatch(action)
       .then(() => {
         navigate("/clienti");
       })
       .catch((error) => {
-        console.error("Errore durante la creazione:", error);
+        console.error("Errore durante la richiesta:", error);
         setErrore(true);
       });
   };
@@ -68,7 +116,7 @@ function FormClienti() {
       <Form noValidate validated={validated} onSubmit={handleSubmit}>
         <Row className="gap-5 justify-content-center mx-5 mt-5">
           <Col xs={3}>
-            <h2>Nuovo Cliente</h2>
+            {!id ? <h2>Nuovo Cliente</h2> : <h2>Modifica Cliente</h2>}
             <Form.Group controlId="validationCustom01">
               <Form.Label>Ragione Sociale</Form.Label>
               <Form.Control
@@ -126,214 +174,227 @@ function FormClienti() {
               />
             </Form.Group>
 
-            <p className="mb-0 mt-2">Tipo Cliente</p>
-            <Form.Select
-              className="bg-black border-0 d-flex"
-              onChange={(e) => setForm({ ...form, tipoCliente: e.target.value })}
-              style={{ width: "205px" }}
-            >
-              <option value="PA">PA</option>
-              <option value="SAS">SAS</option>
-              <option value="SPA">SPA</option>
-              <option value="SRL">SRL</option>
-            </Form.Select>
+            {!id && (
+              <div>
+                <p className="mb-0 mt-2">Tipo Cliente</p>
+                <Form.Select
+                  className="bg-black border-0 d-flex"
+                  onChange={(e) => setForm({ ...form, tipoCliente: e.target.value })}
+                  style={{ width: "205px" }}
+                >
+                  <option value="PA">PA</option>
+                  <option value="SAS">SAS</option>
+                  <option value="SPA">SPA</option>
+                  <option value="SRL">SRL</option>
+                </Form.Select>
+              </div>
+            )}
           </Col>
 
-          <Col xs={3}>
-            <h2>Indirizzo Sede Legale</h2>
+          {!id && (
+            <Col xs={3}>
+              <h2>Indirizzo Sede Legale</h2>
 
-            <Form.Group controlId="validationCustom09">
-              <Form.Label>Via</Form.Label>
-              <Form.Control
-                value={form.indirizzoSedeLegale.via}
-                required
-                type="text"
-                placeholder="Via"
-                onChange={(e) =>
-                  setForm({
-                    ...form,
-                    indirizzoSedeLegale: {
-                      ...form.indirizzoSedeLegale,
-                      via: e.target.value,
-                    },
-                  })
-                }
-                className="bg-black border-0"
-              />
-            </Form.Group>
+              <Form.Group controlId="validationCustom09">
+                <Form.Label>Via</Form.Label>
+                <Form.Control
+                  value={form.indirizzoSedeLegale.via}
+                  required
+                  type="text"
+                  placeholder="Via"
+                  onChange={(e) =>
+                    setForm({
+                      ...form,
+                      indirizzoSedeLegale: {
+                        ...form.indirizzoSedeLegale,
+                        via: e.target.value,
+                      },
+                    })
+                  }
+                  className="bg-black border-0"
+                />
+              </Form.Group>
 
-            <Form.Group controlId="validationCustom09">
-              <Form.Label>Civico</Form.Label>
-              <Form.Control
-                value={form.indirizzoSedeLegale.civico}
-                required
-                type="text"
-                placeholder="Civico"
-                onChange={(e) =>
-                  setForm({
-                    ...form,
-                    indirizzoSedeLegale: {
-                      ...form.indirizzoSedeLegale,
-                      civico: e.target.value,
-                    },
-                  })
-                }
-                className="bg-black border-0"
-              />
-            </Form.Group>
+              <Form.Group controlId="validationCustom09">
+                <Form.Label>Civico</Form.Label>
+                <Form.Control
+                  value={form.indirizzoSedeLegale.civico}
+                  required
+                  type="text"
+                  placeholder="Civico"
+                  onChange={(e) =>
+                    setForm({
+                      ...form,
+                      indirizzoSedeLegale: {
+                        ...form.indirizzoSedeLegale,
+                        civico: e.target.value,
+                      },
+                    })
+                  }
+                  className="bg-black border-0"
+                />
+              </Form.Group>
 
-            <Form.Group controlId="validationCustom09">
-              <Form.Label>Località</Form.Label>
-              <Form.Control
-                value={form.indirizzoSedeLegale.localita}
-                required
-                type="text"
-                placeholder="Località"
-                onChange={(e) =>
-                  setForm({
-                    ...form,
-                    indirizzoSedeLegale: {
-                      ...form.indirizzoSedeLegale,
-                      localita: e.target.value,
-                    },
-                  })
-                }
-                className="bg-black border-0"
-              />
-            </Form.Group>
+              <Form.Group controlId="validationCustom09">
+                <Form.Label>Località</Form.Label>
+                <Form.Control
+                  value={form.indirizzoSedeLegale.localita}
+                  required
+                  type="text"
+                  placeholder="Località"
+                  onChange={(e) =>
+                    setForm({
+                      ...form,
+                      indirizzoSedeLegale: {
+                        ...form.indirizzoSedeLegale,
+                        localita: e.target.value,
+                      },
+                    })
+                  }
+                  className="bg-black border-0"
+                />
+              </Form.Group>
 
-            <Form.Group controlId="validationCustom10">
-              <Form.Label>Cap</Form.Label>
-              <Form.Control
-                value={form.indirizzoSedeLegale.cap}
-                required
-                type="text"
-                placeholder="CAP"
-                onChange={(e) =>
-                  setForm({
-                    ...form,
-                    indirizzoSedeLegale: {
-                      ...form.indirizzoSedeLegale,
-                      cap: e.target.value,
-                    },
-                  })
-                }
-                className="bg-black border-0"
-              />
-            </Form.Group>
+              <Form.Group controlId="validationCustom10">
+                <Form.Label>Cap</Form.Label>
+                <Form.Control
+                  value={form.indirizzoSedeLegale.cap}
+                  required
+                  type="text"
+                  placeholder="CAP"
+                  onChange={(e) =>
+                    setForm({
+                      ...form,
+                      indirizzoSedeLegale: {
+                        ...form.indirizzoSedeLegale,
+                        cap: e.target.value,
+                      },
+                    })
+                  }
+                  className="bg-black border-0"
+                />
+              </Form.Group>
 
-            <Form.Group controlId="validationCustom11">
-              <Form.Label>Comune Sede Legale</Form.Label>
-              <Form.Control
-                value={form.comuneSedeLegale}
-                required
-                type="text"
-                placeholder="Comune Sede Legale"
-                onChange={(e) => setForm({ ...form, comuneSedeLegale: e.target.value })}
-                className="bg-black border-0"
-              />
-            </Form.Group>
-          </Col>
+              <Form.Group controlId="validationCustom11">
+                <Form.Label>Comune Sede Legale</Form.Label>
+                <Form.Control
+                  value={form.comuneSedeLegale}
+                  required
+                  type="text"
+                  placeholder="Comune Sede Legale"
+                  onChange={(e) => setForm({ ...form, comuneSedeLegale: e.target.value })}
+                  className="bg-black border-0"
+                />
+              </Form.Group>
+            </Col>
+          )}
+          {!id && (
+            <Col xs={3}>
+              <h2>Indirizzo Sede Operativa</h2>
 
-          <Col xs={3}>
-            <h2>Indirizzo Sede Operativa</h2>
+              <Form.Group controlId="validationCustom09">
+                <Form.Label>Via</Form.Label>
+                <Form.Control
+                  value={form.indirizzoSedeOperativa.via}
+                  required
+                  type="text"
+                  placeholder="Via"
+                  onChange={(e) =>
+                    setForm({
+                      ...form,
+                      indirizzoSedeOperativa: {
+                        ...form.indirizzoSedeOperativa,
+                        via: e.target.value,
+                      },
+                    })
+                  }
+                  className="bg-black border-0"
+                />
+              </Form.Group>
 
-            <Form.Group controlId="validationCustom09">
-              <Form.Label>Via</Form.Label>
-              <Form.Control
-                value={form.indirizzoSedeOperativa.via}
-                required
-                type="text"
-                placeholder="Via"
-                onChange={(e) =>
-                  setForm({
-                    ...form,
-                    indirizzoSedeOperativa: {
-                      ...form.indirizzoSedeOperativa,
-                      via: e.target.value,
-                    },
-                  })
-                }
-                className="bg-black border-0"
-              />
-            </Form.Group>
+              <Form.Group controlId="validationCustom09">
+                <Form.Label>Civico</Form.Label>
+                <Form.Control
+                  value={form.indirizzoSedeOperativa.civico}
+                  required
+                  type="text"
+                  placeholder="Civico"
+                  onChange={(e) =>
+                    setForm({
+                      ...form,
+                      indirizzoSedeOperativa: {
+                        ...form.indirizzoSedeOperativa,
+                        civico: e.target.value,
+                      },
+                    })
+                  }
+                  className="bg-black border-0"
+                />
+              </Form.Group>
 
-            <Form.Group controlId="validationCustom09">
-              <Form.Label>Civico</Form.Label>
-              <Form.Control
-                value={form.indirizzoSedeOperativa.civico}
-                required
-                type="text"
-                placeholder="Civico"
-                onChange={(e) =>
-                  setForm({
-                    ...form,
-                    indirizzoSedeOperativa: {
-                      ...form.indirizzoSedeOperativa,
-                      civico: e.target.value,
-                    },
-                  })
-                }
-                className="bg-black border-0"
-              />
-            </Form.Group>
+              <Form.Group controlId="validationCustom09">
+                <Form.Label>Località</Form.Label>
+                <Form.Control
+                  value={form.indirizzoSedeOperativa.localita}
+                  required
+                  type="text"
+                  placeholder="Località"
+                  onChange={(e) =>
+                    setForm({
+                      ...form,
+                      indirizzoSedeOperativa: {
+                        ...form.indirizzoSedeOperativa,
+                        localita: e.target.value,
+                      },
+                    })
+                  }
+                  className="bg-black border-0"
+                />
+              </Form.Group>
 
-            <Form.Group controlId="validationCustom09">
-              <Form.Label>Località</Form.Label>
-              <Form.Control
-                value={form.indirizzoSedeOperativa.localita}
-                required
-                type="text"
-                placeholder="Località"
-                onChange={(e) =>
-                  setForm({
-                    ...form,
-                    indirizzoSedeOperativa: {
-                      ...form.indirizzoSedeOperativa,
-                      localita: e.target.value,
-                    },
-                  })
-                }
-                className="bg-black border-0"
-              />
-            </Form.Group>
+              <Form.Group controlId="validationCustom10">
+                <Form.Label>CAP</Form.Label>
+                <Form.Control
+                  value={form.indirizzoSedeOperativa.cap}
+                  required
+                  type="text"
+                  placeholder="CAP"
+                  onChange={(e) =>
+                    setForm({
+                      ...form,
+                      indirizzoSedeOperativa: {
+                        ...form.indirizzoSedeOperativa,
+                        cap: e.target.value,
+                      },
+                    })
+                  }
+                  className="bg-black border-0"
+                />
+              </Form.Group>
 
-            <Form.Group controlId="validationCustom10">
-              <Form.Label>CAP</Form.Label>
-              <Form.Control
-                value={form.indirizzoSedeOperativa.cap}
-                required
-                type="text"
-                placeholder="CAP"
-                onChange={(e) =>
-                  setForm({
-                    ...form,
-                    indirizzoSedeOperativa: {
-                      ...form.indirizzoSedeOperativa,
-                      cap: e.target.value,
-                    },
-                  })
-                }
-                className="bg-black border-0"
-              />
-            </Form.Group>
-
-            <Form.Group controlId="validationCustom11">
-              <Form.Label>Comune Sede Operativa</Form.Label>
-              <Form.Control
-                value={form.comuneSedeOperativa}
-                required
-                type="text"
-                placeholder="Comune Sede Operativa"
-                onChange={(e) => setForm({ ...form, comuneSedeOperativa: e.target.value })}
-                className="bg-black border-0"
-              />
-            </Form.Group>
-          </Col>
+              <Form.Group controlId="validationCustom11">
+                <Form.Label>Comune Sede Operativa</Form.Label>
+                <Form.Control
+                  value={form.comuneSedeOperativa}
+                  required
+                  type="text"
+                  placeholder="Comune Sede Operativa"
+                  onChange={(e) => setForm({ ...form, comuneSedeOperativa: e.target.value })}
+                  className="bg-black border-0"
+                />
+              </Form.Group>
+            </Col>
+          )}
           {errore ? <p className="text-danger text-center m-0">Dati invalidi</p> : <p className="m-0"> </p>}
-          <Button className="bg-secondary w-25 m-0" type="submit">
-            Crea
-          </Button>
+          {!id ? (
+            <Button className="bg-secondary w-25 m-0" type="submit">
+              Crea
+            </Button>
+          ) : (
+            <Button className="bg-secondary w-25 m-0" type="submit">
+              Modifica
+            </Button>
+          )}
           <Button as={Link} to="/clienti">
             Torna indietro
           </Button>

@@ -1,10 +1,11 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams, useNavigate } from "react-router";
+import { useParams, useNavigate, Link } from "react-router";
 import { deleteCliente, deleteFatturaCliente, fetchClienteDetails } from "../redux/action";
 import { Button, Card, Col, Container, Image, Row, Table } from "react-bootstrap";
 import { isAdmin } from "../utils/getUserRoles";
 import { PiPlus } from "react-icons/pi";
+import { BiPencil } from "react-icons/bi";
 
 function ClienteDetails() {
   const { id } = useParams();
@@ -46,8 +47,14 @@ function ClienteDetails() {
               <Image src={cliente.logoAziendale} alt="logo" className="rounded-circle" style={{ width: "150px" }} />
             </Col>
           </Row>
-          <h2 className="text-center mb-4">Dettagli Cliente</h2>
-
+          <div className="d-flex justify-content-center align-items-center mb-4">
+            <h2 className="m-0">Dettagli Cliente</h2>
+            {isAdmin() && (
+              <Button as={Link} to={`/clienti/edit/${id}`} className="fs-3">
+                <BiPencil></BiPencil>
+              </Button>
+            )}
+          </div>
           <Card className="mb-4 bg-secondary text-light">
             <Card.Header className="fw-bold bg-dark text-light">Informazioni Generali</Card.Header>
             <Card.Body>

@@ -1,8 +1,10 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams, useNavigate } from "react-router";
-import { deleteFatturaCliente, fetchClienteDetails } from "../redux/action";
+import { deleteCliente, deleteFatturaCliente, fetchClienteDetails } from "../redux/action";
 import { Button, Card, Col, Container, Image, Row, Table } from "react-bootstrap";
+import { isAdmin } from "../utils/getUserRoles";
+import { PiPlus } from "react-icons/pi";
 
 function ClienteDetails() {
   const { id } = useParams();
@@ -20,8 +22,21 @@ function ClienteDetails() {
     dispatch(fetchClienteDetails(id));
   };
 
+  const handleDeleteCliente = async () => {
+    await dispatch(deleteCliente(id));
+    navigate("/clienti");
+  };
+
   return (
     <Container className="my-4 text-light">
+      <div className="d-flex justify-content-between align-items-center">
+        <Button onClick={() => navigate("/clienti")} className="mb-4">
+          Lista Clienti
+        </Button>
+        <Button className="text-white" onClick={handleDeleteCliente} variant="danger">
+          Cancella Cliente
+        </Button>
+      </div>
       {cliente ? (
         <>
           <Row className="justify-content-center mb-4">
@@ -106,9 +121,11 @@ function ClienteDetails() {
           <Card className="bg-secondary text-light">
             <Card.Header className="fw-bold bg-dark text-light">Fatture</Card.Header>
             <Card.Body>
-              <Button variant="success" className="mb-3" onClick={() => navigate(`/clienti/${id}/nuova-fattura`)}>
-                Aggiungi Fattura
-              </Button>
+              {isAdmin() && (
+                <Button onClick={() => navigate(`/clienti/${id}/nuova-fattura`)}>
+                  <PiPlus className="fs-3 mb-2 border p-1" style={{ cursor: "pointer" }} />
+                </Button>
+              )}
               <Table striped bordered hover responsive variant="dark">
                 <thead>
                   <tr>
@@ -129,9 +146,11 @@ function ClienteDetails() {
                       <td>{fattura.numero}</td>
                       <td>{fattura.stato}</td>
                       <td>
-                        <Button variant="danger" size="sm" onClick={() => handleDelete(fattura.id)}>
-                          Elimina
-                        </Button>
+                        {isAdmin() && (
+                          <Button variant="danger" size="sm" onClick={() => handleDelete(fattura.id)}>
+                            Elimina
+                          </Button>
+                        )}
                       </td>
                     </tr>
                   ))}

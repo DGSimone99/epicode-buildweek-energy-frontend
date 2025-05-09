@@ -113,6 +113,19 @@ export const newClient = (client) => {
   };
 };
 
+export const deleteCliente = (id) => {
+  return async () => {
+    try {
+      const token = localStorage.getItem("token");
+      await axios.delete(`/api/clienti/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+};
+
 export const deleteFatturaCliente = (id) => {
   return async () => {
     try {

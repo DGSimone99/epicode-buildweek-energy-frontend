@@ -118,7 +118,7 @@ function FormClienti() {
           <Col xs={3}>
             {!id ? <h2>Nuovo Cliente</h2> : <h2>Modifica Cliente</h2>}
             <Form.Group controlId="validationCustom01">
-              <Form.Label>Ragione Sociale</Form.Label>
+              <Form.Label className="mb-1 mt-2">Ragione Sociale</Form.Label>
               <Form.Control
                 value={form.ragioneSociale}
                 required
@@ -129,7 +129,7 @@ function FormClienti() {
               />
             </Form.Group>
             <Form.Group controlId="validationCustom02">
-              <Form.Label>Partita Iva</Form.Label>
+              <Form.Label className="mb-1 mt-2">Partita Iva</Form.Label>
               <Form.Control
                 value={form.partitaIva}
                 required
@@ -140,7 +140,7 @@ function FormClienti() {
               />
             </Form.Group>
             <Form.Group controlId="validationCustom03">
-              <Form.Label>Email</Form.Label>
+              <Form.Label className="mb-1 mt-2">Email</Form.Label>
               <Form.Control
                 value={form.email}
                 required
@@ -151,7 +151,7 @@ function FormClienti() {
               />
             </Form.Group>
             <Form.Group controlId="validationCustom04">
-              <Form.Label>Fatturato Annuale</Form.Label>
+              <Form.Label className="mb-1 mt-2">Fatturato Annuale</Form.Label>
               <Form.Control
                 value={form.fatturatoAnnuale}
                 required
@@ -161,9 +161,8 @@ function FormClienti() {
                 className="bg-black border-0"
               />
             </Form.Group>
-
             <Form.Group controlId="validationCustom08">
-              <Form.Label>Telefono</Form.Label>
+              <Form.Label className="mb-1 mt-2">Telefono</Form.Label>
               <Form.Control
                 value={form.telefono}
                 required
@@ -173,10 +172,9 @@ function FormClienti() {
                 className="bg-black border-0"
               />
             </Form.Group>
-
             {!id && (
               <div>
-                <p className="mb-0 mt-2">Tipo Cliente</p>
+                <p className="mb-1 mt-2">Tipo Cliente</p>
                 <Form.Select
                   className="bg-black border-0 d-flex"
                   onChange={(e) => setForm({ ...form, tipoCliente: e.target.value })}
@@ -187,6 +185,16 @@ function FormClienti() {
                   <option value="SPA">SPA</option>
                   <option value="SRL">SRL</option>
                 </Form.Select>
+
+                <Form.Group controlId="XXXXXXXXXXXXXXXXXX">
+                  <Form.Label className="mb-1 mt-2">Upload Foto Profilo</Form.Label>
+                  <Form.Control
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => setForm({ ...form, fotoProfilo: e.target.files[0] })}
+                    className="bg-black border-0 my-2"
+                  />
+                </Form.Group>
               </div>
             )}
           </Col>
@@ -196,7 +204,7 @@ function FormClienti() {
               <h2>Indirizzo Sede Legale</h2>
 
               <Form.Group controlId="validationCustom09">
-                <Form.Label>Via</Form.Label>
+                <Form.Label className="mb-1 mt-2">Via</Form.Label>
                 <Form.Control
                   value={form.indirizzoSedeLegale.via}
                   required
@@ -216,7 +224,7 @@ function FormClienti() {
               </Form.Group>
 
               <Form.Group controlId="validationCustom09">
-                <Form.Label>Civico</Form.Label>
+                <Form.Label className="mb-1 mt-2">Civico</Form.Label>
                 <Form.Control
                   value={form.indirizzoSedeLegale.civico}
                   required
@@ -236,7 +244,7 @@ function FormClienti() {
               </Form.Group>
 
               <Form.Group controlId="validationCustom09">
-                <Form.Label>Località</Form.Label>
+                <Form.Label className="mb-1 mt-2">Località</Form.Label>
                 <Form.Control
                   value={form.indirizzoSedeLegale.localita}
                   required
@@ -256,7 +264,7 @@ function FormClienti() {
               </Form.Group>
 
               <Form.Group controlId="validationCustom10">
-                <Form.Label>Cap</Form.Label>
+                <Form.Label className="mb-1 mt-2">Cap</Form.Label>
                 <Form.Control
                   value={form.indirizzoSedeLegale.cap}
                   required
@@ -276,7 +284,7 @@ function FormClienti() {
               </Form.Group>
 
               <Form.Group controlId="validationCustom11">
-                <Form.Label>Comune Sede Legale</Form.Label>
+                <Form.Label className="mb-1 mt-2">Comune Sede Legale</Form.Label>
                 <Form.Control
                   value={form.comuneSedeLegale}
                   required
@@ -293,7 +301,7 @@ function FormClienti() {
               <h2>Indirizzo Sede Operativa</h2>
 
               <Form.Group controlId="validationCustom09">
-                <Form.Label>Via</Form.Label>
+                <Form.Label className="mb-1 mt-2">Via</Form.Label>
                 <Form.Control
                   value={form.indirizzoSedeOperativa.via}
                   required
@@ -313,7 +321,7 @@ function FormClienti() {
               </Form.Group>
 
               <Form.Group controlId="validationCustom09">
-                <Form.Label>Civico</Form.Label>
+                <Form.Label className="mb-1 mt-2">Civico</Form.Label>
                 <Form.Control
                   value={form.indirizzoSedeOperativa.civico}
                   required
@@ -333,7 +341,7 @@ function FormClienti() {
               </Form.Group>
 
               <Form.Group controlId="validationCustom09">
-                <Form.Label>Località</Form.Label>
+                <Form.Label className="mb-1 mt-2">Località</Form.Label>
                 <Form.Control
                   value={form.indirizzoSedeOperativa.localita}
                   required
@@ -353,7 +361,7 @@ function FormClienti() {
               </Form.Group>
 
               <Form.Group controlId="validationCustom10">
-                <Form.Label>CAP</Form.Label>
+                <Form.Label className="mb-1 mt-2">CAP</Form.Label>
                 <Form.Control
                   value={form.indirizzoSedeOperativa.cap}
                   required
@@ -373,7 +381,7 @@ function FormClienti() {
               </Form.Group>
 
               <Form.Group controlId="validationCustom11">
-                <Form.Label>Comune Sede Operativa</Form.Label>
+                <Form.Label className="mb-1 mt-2">Comune Sede Operativa</Form.Label>
                 <Form.Control
                   value={form.comuneSedeOperativa}
                   required

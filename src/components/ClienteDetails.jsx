@@ -1,12 +1,13 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router";
+import { useParams, useNavigate } from "react-router";
 import { deleteFatturaCliente, fetchClienteDetails } from "../redux/action";
 import { Button, Card, Col, Container, Image, Row, Table } from "react-bootstrap";
 
 function ClienteDetails() {
   const { id } = useParams();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const cliente = useSelector((state) => state.cliente.cliente || {});
   const fatture = useSelector((state) => state.cliente.cliente.fatture || []);
 
@@ -20,7 +21,7 @@ function ClienteDetails() {
   };
 
   return (
-    <Container className="mt-4 text-light">
+    <Container className="my-4 text-light">
       {cliente ? (
         <>
           <Row className="justify-content-center mb-4">
@@ -105,6 +106,9 @@ function ClienteDetails() {
           <Card className="bg-secondary text-light">
             <Card.Header className="fw-bold bg-dark text-light">Fatture</Card.Header>
             <Card.Body>
+              <Button variant="success" className="mb-3" onClick={() => navigate(`/clienti/${id}/nuova-fattura`)}>
+                Aggiungi Fattura
+              </Button>
               <Table striped bordered hover responsive variant="dark">
                 <thead>
                   <tr>

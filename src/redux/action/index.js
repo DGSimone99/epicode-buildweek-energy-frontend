@@ -157,23 +157,20 @@ export const newFattura = (fattura) => {
     try {
       const token = localStorage.getItem("token");
 
-      const query = new URLSearchParams({
-        idCliente: fattura.idCliente,
-        data: fattura.data,
-        numero: fattura.numero,
-        importo: fattura.importo,
-        stato: fattura.stato,
-      }).toString();
-
       await axios.post(
-        `/api/fatture?${query}`,
-        {},
+        `/api/fatture/clienti/${fattura.idCliente}`,
+        {
+          data: fattura.data,
+          importo: fattura.importo,
+          numero: fattura.numero,
+          stato: fattura.stato,
+        },
         {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
     } catch (error) {
-      console.log(error);
+      console.log("Errore creazione fattura:", error.response?.data || error.message);
     }
   };
 };

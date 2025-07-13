@@ -1,14 +1,12 @@
-link per il back-end: https://github.com/lorella-marino/GroupProject_Java2.git
+Build Week Epicode
 
-# React + Vite
+Link per il back-end: https://github.com/lorella-marino/GroupProject_Java2.git
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Progetto di gruppo realizzato durante la Build Week Epicode: backend di un'azienda di energia.
 
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+Realizzato con
+- [@DGSimone99](https://github.com/DGSimone99)
+- [@RosarioFaro](https://github.com/RosarioFaro)
+- [@lorella-marino](https://github.com/lorella-marino)
+- [@GiorgiaMannino](https://github.com/GiorgiaMannino)
+- [@CosmoPasteur](https://github.com/CosmoPasteur)
